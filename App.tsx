@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Review from './src/pages/review';
+import Review from './src/pages/Review';
 const App = () => {
     return (
         <Router>

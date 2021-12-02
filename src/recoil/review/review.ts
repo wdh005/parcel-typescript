@@ -13,18 +13,19 @@ export interface Review {
 export interface ReviewQuery {
     size: number;
     offset: number;
-    subject?: string;
-    year?: string;
+    subject: string;
+    year: string;
 }
 
 export const reviewQuery = atom<ReviewQuery>({
     key: 'reviewQuery',
-    default: { size: 1, offset: 5 },
+    default: { size: 1, offset: 5, subject: '', year: '' },
 });
 
 export const reviewData = selector({
     key: 'review',
     get: async ({ get }) => {
+        try{
         const { size, offset, subject, year } = get(reviewQuery);
         if (subject && year) {
             const res = await apiClient.get(
@@ -42,5 +43,8 @@ export const reviewData = selector({
         }
         const res = await apiClient.get(`?SIZE=${size}&OFFSET=${offset}`);
         return res.data;
+    }catch(error) {
+        throw error
+    }
     },
 });

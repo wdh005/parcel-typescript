@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValueLoadable, useRecoilValue } from 'recoil';
-import { reviewData, reviewQuery, Review, ReviewQuery } from '../recoil/review/review';
+import {
+    reviewData,
+    reviewQuery,
+    Review,
+    ReviewQuery,
+    reviewDataTotal,
+} from '../recoil/review/review';
 import ErrorBoundary from '../components/ErrorBoundary ';
 import { filterData } from '../models/filterData';
+import Pagination from '../layouts/Pagination';
 
 const ReviewPage = () => {
     const [size, setSize] = useState(1);
@@ -11,6 +18,7 @@ const ReviewPage = () => {
     const [year, setYear] = useState(``);
 
     const reviewList = useRecoilValue(reviewData);
+    const reviewListTotal = useRecoilValue(reviewDataTotal);
     const [Query, setQuery] = useRecoilState(reviewQuery);
 
     const onClickYearFilterBtn = (title: string) => {
@@ -26,6 +34,7 @@ const ReviewPage = () => {
     }, [size, offset, subject, year]);
 
     console.log(reviewList);
+    console.log(reviewListTotal);
     console.log(Query);
     console.log(subject);
     console.log(year);
@@ -57,23 +66,28 @@ const ReviewPage = () => {
                 </div>
             </div>
             <div>
-                {reviewList.data.length !==0 ? reviewList.data.map((review: Review) => (
-                    <ul
-                        key={
-                            review.student_name +
-                            review.review +
-                            review.year_name +
-                            review.subject_view_name
-                        }
-                    >
-                        <li>{review.student_name}</li>
-                        <li>{review.review}</li>
-                        <li>{review.subject_view_name}</li>
-                        <li>{review.year_name}</li>
-                        <li>{review.reg_datetime}</li>
-                    </ul>
-                )) : <span>값이 없습니다.</span>}
+                {reviewList.data.length !== 0 ? (
+                    reviewList.data.map((review: Review) => (
+                        <ul
+                            key={
+                                review.student_name +
+                                review.review +
+                                review.year_name +
+                                review.subject_view_name
+                            }
+                        >
+                            <li>{review.student_name}</li>
+                            <li>{review.review}</li>
+                            <li>{review.subject_view_name}</li>
+                            <li>{review.year_name}</li>
+                            <li>{review.reg_datetime}</li>
+                        </ul>
+                    ))
+                ) : (
+                    <span>값이 없습니다.</span>
+                )}
             </div>
+            <Pagination />
         </>
     );
 };
